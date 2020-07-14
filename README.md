@@ -1,14 +1,23 @@
+# privGAN
+Code for PETS 2020 submission titled 'PrivGAN: Protecting GANs from membership inference attacks at low cost'
 
-# Contributing
+### Version information 
+1) Python 3.7.3 
+2) Numpy 1.16.2 
+3) Pandas 0.25.3 
+4) Tqdm 4.38.0 
+5) Keras 2.2.4 
+6) Scipy 1.1.0 
+7) Tensorflow 1.14.0 
+8) Scikit-learn 0.20.3 
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+### Notebooks comparing white-box attack accuracy of privGAN and GAN on verious datasets 
+1) PrivGAN_mnist.ipynb 
+2) PrivGAN_mnist_fashion.ipynb 
+3) PrivGAN_lfw.ipynb 
+4) PrivGAN_cifar.ipynb 
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+### Notebooks comparing performance on downstream classification tasks
+1) MNIST_down.ipynb 
