@@ -1,5 +1,5 @@
 # privGAN
-Code for PETS 2020 submission titled 'PrivGAN: Protecting GANs from membership inference attacks at low cost' [ArXiv Link](https://arxiv.org/abs/2001.00071)
+Code for PETS 2021 submission titled 'PrivGAN: Protecting GANs from membership inference attacks at low cost' [ArXiv Link](https://arxiv.org/abs/2001.00071)
 
 ### Version information 
 1) Python 3.7.3 
