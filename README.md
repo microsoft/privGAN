@@ -1,5 +1,6 @@
 # privGAN
-Code for PETS 2021 submission titled 'PrivGAN: Protecting GANs from membership inference attacks at low cost' [ArXiv Link](https://arxiv.org/abs/2001.00071)
+This repository contains the source code for PrivGan - a novel approach for deterring membership inference attacks on GAN generated synthetic medical data.Currently, the repository contains the jupyter notebooks for various datasets. We will be converting the code into a library in the future.
+Please visit our paper 'PrivGAN: Protecting GANs from membership inference attacks at low cost' [ArXiv Link](https://arxiv.org/abs/2001.00071) submitted at PETS 2021
 
 ### Version information 
 1) Python 3.7.3 
@@ -21,3 +22,14 @@ Code for PETS 2021 submission titled 'PrivGAN: Protecting GANs from membership i
 
 ### Notebooks comparing performance on downstream classification tasks
 1) MNIST_down.ipynb 
+
+### Installation
+<TBD>
+  
+### Contribution
+<TBD>
+  
+### Contact
+
+### Copyright
+Copyright (c) Microsoft Corporation.
