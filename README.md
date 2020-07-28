@@ -27,9 +27,12 @@ Please visit our paper 'PrivGAN: Protecting GANs from membership inference attac
 <TBD>
   
 ### Contribution
+Before submitting a pull request please remove all output from your notebooks by going to Cell -> All Output -> Clear
 <TBD>
   
 ### Contact
 
 ### Copyright
 Copyright (c) Microsoft Corporation.
+
+
