@@ -2,179 +2,176 @@
 #Licensed under the MIT License.
 
 import os
-os.environ["KERAS_BACKEND"] = "tensorflow"
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-import keras 
-from keras.layers import Input, Conv2D, Conv2DTranspose, Reshape, Activation, ZeroPadding2D, Dense, Dropout, MaxPooling2D
-from keras.models import Model, Sequential
-from keras.layers.core import Reshape, Dense, Dropout, Flatten
-from keras.layers.advanced_activations import LeakyReLU
-from keras.layers.convolutional import Convolution2D, UpSampling2D
-from keras.layers.normalization import BatchNormalization
-from keras.datasets import mnist,cifar10
-from keras.optimizers import Adam
-from keras import backend as K
-from keras import initializers
+
+import tensorflow as tf
+from tensorflow.keras import Input
+from tensorflow.keras import Model, Sequential
+from tensorflow.keras.layers import Reshape, Dense, Dropout, Flatten, LeakyReLU, Conv2D, MaxPool2D, ZeroPadding2D, Conv2DTranspose, UpSampling2D, BatchNormalization
+from tensorflow.keras.optimizers import Adam
+
+from tensorflow.keras.datasets import mnist,cifar10
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras import initializers
 from scipy import stats
 import warnings
 import pandas as pd 
-import tensorflow as tf
 warnings.filterwarnings("ignore")
 
 
 ########################################### LFW ################################################################
 
-def LFW_Generator(randomDim = 100, optim = Adam(lr=0.0002, beta_1=0.5)):
+# def LFW_Generator(randomDim = 100, optim = Adam(lr=0.0002, beta_1=0.5)):
     
-    generator = Sequential()
-    generator.add(Dense(512, input_dim=randomDim, kernel_initializer=initializers.RandomNormal(stddev=0.02),
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(LeakyReLU(0.2,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Dense(512,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(LeakyReLU(0.2,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Dense(1024,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(LeakyReLU(0.2,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Dense(2914, activation='tanh',
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.compile(loss='binary_crossentropy', optimizer=optim)
+#     generator = Sequential()
+#     generator.add(Dense(512, input_dim=randomDim, kernel_initializer=initializers.RandomNormal(stddev=0.02),
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(LeakyReLU(0.2,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Dense(512,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(LeakyReLU(0.2,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Dense(1024,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(LeakyReLU(0.2,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Dense(2914, activation='tanh',
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.compile(loss='binary_crossentropy', optimizer=optim)
     
-    return generator
+#     return generator
 
 
-def LFW_Discriminator(optim = Adam(lr=0.0002, beta_1=0.5)):
+# def LFW_Discriminator(optim = Adam(lr=0.0002, beta_1=0.5)):
     
-    discriminator = Sequential()
-    discriminator.add(Dense(2048, input_dim=2914, kernel_initializer=initializers.RandomNormal(stddev=0.02),
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(512,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(256,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(1, activation='sigmoid',
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.compile(loss='binary_crossentropy', optimizer=optim)
+#     discriminator = Sequential()
+#     discriminator.add(Dense(2048, input_dim=2914, kernel_initializer=initializers.RandomNormal(stddev=0.02),
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(512,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(256,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(1, activation='sigmoid',
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.compile(loss='binary_crossentropy', optimizer=optim)
     
-    return discriminator
+#     return discriminator
 
-def LFW_DiscriminatorPrivate(OutSize = 2, optim = Adam(lr=0.0002, beta_1=0.5)):
+# def LFW_DiscriminatorPrivate(OutSize = 2, optim = Adam(lr=0.0002, beta_1=0.5)):
     
-    discriminator = Sequential()
-    discriminator.add(Dense(2048, input_dim=2914, kernel_initializer=initializers.RandomNormal(stddev=0.02),
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(512,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(256,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(OutSize, activation='softmax',
-                     name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.compile(loss='sparse_categorical_crossentropy', optimizer=optim)
+#     discriminator = Sequential()
+#     discriminator.add(Dense(2048, input_dim=2914, kernel_initializer=initializers.RandomNormal(stddev=0.02),
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(512,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(256,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(OutSize, activation='softmax',
+#                      name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.compile(loss='sparse_categorical_crossentropy', optimizer=optim)
     
-    return discriminator
+#     return discriminator
 
 
 
 ########################################### CIFAR ##############################################################
 
-def CIFAR_Discriminator(optim = Adam(lr=0.0002, beta_1=0.5)):
+# def CIFAR_Discriminator(optim = Adam(lr=0.0002, beta_1=0.5)):
     
-    discriminator = Sequential()
-    discriminator.add(Conv2D(64, kernel_size=5, strides=2, padding='same',
-                             input_shape=((32, 32, 3)), kernel_initializer=initializers.RandomNormal(stddev=0.02),
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Conv2D(256, kernel_size=5, strides=2, padding='same',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Flatten(name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(1, activation='sigmoid',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.compile(loss='binary_crossentropy', optimizer=optim)
+#     discriminator = Sequential()
+#     discriminator.add(Conv2D(64, kernel_size=5, strides=2, padding='same',
+#                              input_shape=((32, 32, 3)), kernel_initializer=initializers.RandomNormal(stddev=0.02),
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Conv2D(256, kernel_size=5, strides=2, padding='same',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Flatten(name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(1, activation='sigmoid',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.compile(loss='binary_crossentropy', optimizer=optim)
 
-    return discriminator
+#     return discriminator
 
-def CIFAR_DiscriminatorPrivate(OutSize = 2, optim = Adam(lr=0.0002, beta_1=0.5)):
+# def CIFAR_DiscriminatorPrivate(OutSize = 2, optim = Adam(lr=0.0002, beta_1=0.5)):
     
-    discriminator = Sequential()
-    discriminator.add(Conv2D(64, kernel_size=5, strides=2, padding='same',
-                             input_shape=((32, 32, 3)), kernel_initializer=initializers.RandomNormal(stddev=0.02),
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Conv2D(256, kernel_size=5, strides=2, padding='same',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(LeakyReLU(0.2,
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Flatten(name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.add(Dense(OutSize, activation='softmax',
-                             name = 'layer'+str(np.random.randint(0,1e9))))
-    discriminator.compile(loss='sparse_categorical_crossentropy', optimizer=optim)
+#     discriminator = Sequential()
+#     discriminator.add(Conv2D(64, kernel_size=5, strides=2, padding='same',
+#                              input_shape=((32, 32, 3)), kernel_initializer=initializers.RandomNormal(stddev=0.02),
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Conv2D(128, kernel_size=5, strides=2, padding='same',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Conv2D(256, kernel_size=5, strides=2, padding='same',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(LeakyReLU(0.2,
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Flatten(name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.add(Dense(OutSize, activation='softmax',
+#                              name = 'layer'+str(np.random.randint(0,1e9))))
+#     discriminator.compile(loss='sparse_categorical_crossentropy', optimizer=optim)
     
-    return discriminator
+#     return discriminator
 
 
-def CIFAR_Generator(randomDim = 100, optim = Adam(lr=0.0002, beta_1=0.5)):
+# def CIFAR_Generator(randomDim = 100, optim = Adam(lr=0.0002, beta_1=0.5)):
     
-    generator = Sequential()
-    generator.add(Dense(2*2*512, input_shape=(randomDim,), kernel_initializer=initializers.RandomNormal(stddev=0.02),
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Reshape((2, 2, 512),
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(LeakyReLU(0.2,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Conv2DTranspose(256, kernel_size=5, strides=2, padding='same',
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(LeakyReLU(0.2,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Conv2DTranspose(128, kernel_size=5, strides=2, padding='same',
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(LeakyReLU(0.2,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Conv2DTranspose(64, kernel_size=5, strides=2, padding='same',
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(LeakyReLU(0.2,
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.add(Conv2DTranspose(3, kernel_size=5, strides=2, padding='same',
-                              activation='tanh',
-                 name = 'layer'+str(np.random.randint(0,1e9))))
-    generator.compile(loss='binary_crossentropy', optimizer=optim)
+#     generator = Sequential()
+#     generator.add(Dense(2*2*512, input_shape=(randomDim,), kernel_initializer=initializers.RandomNormal(stddev=0.02),
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Reshape((2, 2, 512),
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(LeakyReLU(0.2,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Conv2DTranspose(256, kernel_size=5, strides=2, padding='same',
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(LeakyReLU(0.2,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Conv2DTranspose(128, kernel_size=5, strides=2, padding='same',
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(LeakyReLU(0.2,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Conv2DTranspose(64, kernel_size=5, strides=2, padding='same',
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(LeakyReLU(0.2,
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.add(Conv2DTranspose(3, kernel_size=5, strides=2, padding='same',
+#                               activation='tanh',
+#                  name = 'layer'+str(np.random.randint(0,1e9))))
+#     generator.compile(loss='binary_crossentropy', optimizer=optim)
     
-    return generator
+#     return generator
 
 
 
