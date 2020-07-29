@@ -2,25 +2,22 @@
 #Licensed under the MIT License.
 
 import os
-os.environ["KERAS_BACKEND"] = "tensorflow"
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-import keras 
-from keras.layers import Input, Conv2D, Conv2DTranspose, Reshape, Activation, ZeroPadding2D, Dense, Dropout, MaxPooling2D
-from keras.models import Model, Sequential
-from keras.layers.core import Reshape, Dense, Dropout, Flatten
-from keras.layers.advanced_activations import LeakyReLU
-from keras.layers.convolutional import Convolution2D, UpSampling2D
-from keras.layers.normalization import BatchNormalization
-from keras.datasets import mnist,cifar10
-from keras.optimizers import Adam
-from keras import backend as K
-from keras import initializers
+
+import tensorflow as tf
+from tensorflow.keras import Input
+from tensorflow.keras import Model, Sequential
+from tensorflow.keras.layers import Reshape, Dense, Dropout, Flatten, LeakyReLU, Conv2D, MaxPool2D, ZeroPadding2D, Conv2DTranspose, UpSampling2D, BatchNormalization
+from tensorflow.keras.optimizers import Adam
+
+from tensorflow.keras.datasets import mnist,cifar10
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras import initializers
 from scipy import stats
 import warnings
 import pandas as pd 
-import tensorflow as tf
 warnings.filterwarnings("ignore")
 
 
