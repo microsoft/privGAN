@@ -44,7 +44,7 @@ class CNNClassifier:
         Returns:
         Scalar test loss - loss and accuracy post evaluation
         """
-
+        tf.keras.backend.clear_session()
         self.model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
