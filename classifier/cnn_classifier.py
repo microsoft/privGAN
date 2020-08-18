@@ -29,22 +29,21 @@ class CNNClassifier:
         self.input_shape = input_shape
         self.model = self.__build_model()
 
-    def train(self, x_train, y_train, batch_size, epochs, x_validation, y_validation):
+    def train(self, x_train, y_train, x_validation, y_validation, batch_size=256, epochs=25):
         """Trains and evaluates the CNN classifier model.
         Uses accuracy as the metric
 
         Args:
             x_train (tensor): training data
             y_train (tensor): labels of the training data
-            batch_size (int): size of the batch per epoch
-            epochs (int): number of epochs
             x_validation (tensor): validation batch input 
             y_validation (tensor): tensor representing labels of the validation batch
+            batch_size (int): size of the batch per epoch. Defaults to 256
+            epochs (int): number of epochs. Defaults to 25
         
         Returns:
         Scalar test loss - loss and accuracy post evaluation
         """
-        tf.keras.backend.clear_session()
         self.model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
