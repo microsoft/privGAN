@@ -27,7 +27,7 @@ Please visit our paper 'PrivGAN: Protecting GANs from membership inference attac
 <TBD>
   
 ### Contribution
-Before submitting a pull request please remove all output from your notebooks by going to Cell -> All Output -> Clear
+Please review the link here to know code of conduct https://opensource.microsoft.com/codeofconduct . Before submitting a pull request please remove all output from your notebooks by going to Cell -> All Output -> Clear
 <TBD>
   
 ### Contact
