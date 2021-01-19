@@ -1,6 +1,6 @@
 # privGAN
 This repository contains the source code for PrivGan - a novel approach for deterring membership inference attacks on GAN generated synthetic medical data.Currently, the repository contains the jupyter notebooks for various datasets. We will be converting the code into a library in the future.
-Please visit our paper 'PrivGAN: Protecting GANs from membership inference attacks at low cost' [ArXiv Link](https://arxiv.org/abs/2001.00071) submitted at PETS 2021
+Please visit our paper 'PrivGAN: Protecting GANs from membership inference attacks at low cost' [ArXiv Link](https://arxiv.org/abs/2001.00071) Accepted at PETS 2021
 
 ### Version information 
 1) Python 3.7.3 
